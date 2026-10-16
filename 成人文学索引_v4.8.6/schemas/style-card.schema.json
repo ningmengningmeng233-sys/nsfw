@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "style-card.schema.json",
+  "title": "style-card.json — 风格卡契约（成人文学索引 → 创作侧的交接文件）",
+  "description": "逆向自 成人文学索引_v4.8.0/scripts/style_distillation.py 的 _render_card（v2 九节素材底稿）与其产出的 style-card.md frontmatter。目的：让创作侧（编排器写稿、防撞车清单、组合公式填充）不再从 Markdown 里正则抠字段，而是读一份机器可读的风格卡。md 仍是人读的呈现层，json 是机读事实源，两者同目录同词干（style-card.md / style-card.json）。字段名沿用中文卡内小节名，便于与人读视图逐节对照。",
+  "x-contract": {
+    "name": "style-card",
+    "version": "1.0.0",
+    "owner": "成人文学索引_v4.8.0（scripts/style_distillation.py 轻量蒸馏 + 目录式外部完整蒸馏）",
+    "producers": [
+      "成人文学索引_v4.8.0/scripts/style_distillation.py::_run_lightweight（完整性=轻量）",
+      "成人文学索引_v4.8.0/scripts/style_distillation.py::_run_external 目录分支（外部 skill 产物解析，完整性=完整）"
+    ],
+    "consumers": [
+      "成人文学索引_v4.8.0 创作侧：按「组合公式」填充后用「量化语言指纹」阈值自检",
+      "外部文风技能（wenfeng-skill 等）：读同一份字段即可免解析 Markdown"
+    ],
+    "derived_from": [
+      "成人文学索引_v4.8.0/scripts/style_distillation.py:408-483（_render_card 的九节结构与 frontmatter 键）",
+      "成人文学索引_v4.8.0/references/索引内容.md:394-403（v2 九节定义）"
+    ],
+    "validation": "成人文学索引_v4.8.0/scripts/style_card_schema.py（无第三方依赖的本地校验器，读取本文件而非硬编码规则）"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "作品",
+    "作者",
+    "蒸馏日期",
+    "抽样",
+    "完整性",
+    "来源",
+    "量化语言指纹",
+    "叙事模型",
+    "金句锚点",
+    "母题意象",
+    "人物塑造",
+    "情节技法",
+    "组合公式",
+    "不可写",
+    "诚实边界"
+  ],
+  "properties": {
+    "作品": { "type": "string", "minLength": 1, "description": "书名，沿用卡内《》写法，如《test》" },
+    "作者": { "type": "string", "minLength": 1, "description": "作者名" },
+    "蒸馏日期": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "description": "ISO 日期（YYYY-MM-DD），追更时效判定用" },
+    "基于索引范围": { "type": "string", "description": "小说索引 frontmatter 的章节范围，如 第1章~第500章（追更前）；未知时写「未知」" },
+    "抽样": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["已抽样段数", "总段数"],
+      "description": "抽样口径：卡面「抽样: 8/100 段」的结构化形式",
+      "properties": {
+        "已抽样段数": { "type": "integer", "minimum": 0 },
+        "总段数": { "type": "integer", "minimum": 0 },
+        "说明": { "type": "string", "description": "抽样口径备注（如未解析到抽样信息时说明来源）" }
+      }
+    },
+    "完整性": {
+      "enum": ["轻量", "完整"],
+      "description": "轻量=脚本从索引机械抽取的素材底稿；完整=外部文风 skill（INDEX_STYLE_SKILL 目录/脚本入口）产出"
+    },
+    "来源": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["库"],
+      "description": "溯源：蒸馏时读的索引库；外部完整蒸馏再记外部技能入口",
+      "properties": {
+        "库": { "type": "string", "minLength": 1, "description": "索引库根目录绝对路径" },
+        "外部技能入口": { "type": "string", "description": "实际调用的入口脚本绝对路径（仅完整蒸馏有）" }
+      }
+    },
+    "量化语言指纹": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "脚本实测的键值对指标（average_sentence_length_chars / dialogue_char_ratio / ellipsis_per_1000_chars / excl_question_sentence_ratio / median_paragraph_chars / sample_chars）。未做原文抽查时为空对象，创作侧须回落到「诚实边界」判断可信度。"
+    },
+    "叙事模型": { "type": "array", "items": { "type": "string" }, "description": "③叙事模型维的观察条目（底稿为机械抽取，最终定性由编排器重写）" },
+    "金句锚点": { "type": "array", "items": { "type": "string" }, "description": "②的短锚点素材，逐条带来源；版权纪律：每条 ≤15 字，仅供分析性引用" },
+    "母题意象": { "type": "array", "items": { "type": "string" }, "description": "④母题与意象条目" },
+    "人物塑造": { "type": "array", "items": { "type": "string" }, "description": "⑤人物塑造/关系链条目" },
+    "情节技法": { "type": "array", "items": { "type": "string" }, "description": "⑥情节技法与爽点看点条目" },
+    "组合公式": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "⑦组合公式：键为槽位名（一句话定性/内容需求/叙事规则/语言规则/人物规则/禁则），值为已填内容或 <占位说明>。轻量底稿给占位，创作前必须填充。",
+      "properties": {
+        "一句话定性": { "type": "string" },
+        "内容需求": { "type": "string" },
+        "叙事规则": { "type": "string" },
+        "语言规则": { "type": "string" },
+        "人物规则": { "type": "string" },
+        "禁则": { "type": "string" }
+      }
+    },
+    "不可写": { "type": "array", "items": { "type": "string" }, "description": "⑧Never 句式禁则，创作时逐条规避" },
+    "诚实边界": { "type": "array", "items": { "type": "string" }, "description": "⑨本次结论的适用范围与抽样预算，不得省略" }
+  }
+}
