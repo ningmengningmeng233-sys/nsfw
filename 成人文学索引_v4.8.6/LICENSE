@@ -1,0 +1,26 @@
+成人文学索引（Adult Literature Index）v4.8.3 —— 许可与来源声明
+
+一、本包自有件（skills 主体：SKILL.md、scripts/ 下自研模块、tests/、templates/、docs/adr/ 等）
+  Copyright (c) 2026 柠檬才不萌
+  保留所有权利（Proprietary）。允许在本机内自行使用、备份与改装用于个人用途；
+  未经许可不得对外再分发、不得用于商业再许可、不得移除本声明。
+  与 SKILL.md frontmatter 的 `license: Proprietary` 同源，两处不一致时以本文件为准并须修正。
+
+二、随包分发的共享协议件（不是自有件，许可随主干）
+  scripts/vendor/source_manifest.py
+      来源：本技能柜共享内核 schemas/source_manifest.py（W03 source-manifest 协议）
+      用途：source-manifest.json 的结构、SHA-256 完整性与重复 ID 校验
+      与主干同摘要（sha256 前 16 位）：54784e2c1a8fba0b
+      登记方式：见发布清单 products/adult-index.json 的 vendor 段与 scripts/twin-kernel.json 的孪生登记
+  scripts/vendor/source-manifest.schema.json
+      同上协议的 JSON Schema，摘要前 16 位：95a42dc0893eb6ce
+  这两份文件与其主干同许可条款发布；如主干许可变更，须同步本声明。
+
+三、样例与数据
+  examples/ 与模板内文本均为合成或示意内容；本包不分发任何真实书库原稿。
+  用户自备的索引库数据、`.env` 配置与密钥不属于本包分发内容。
+
+四、第三方依赖
+  requirements.txt 所列第三方库（requests / python-dotenv / PyYAML 及可选的
+  numpy / sentence-transformers / pytest / responses）各自适用其上游许可证，
+  本声明不改变其条款，也不将其重新授权。
