@@ -1,0 +1,34 @@
+{
+  "schema_version": "cabinet-only-refs-1",
+  "why": "包内文档若指向只在开发柜里存在的路径，收件人照做必然失败。逐条登记后，新增未登记的柜根引用会被 scripts/check_package.py 判红；已登记但不再出现的引用同样判红（防登记失效）。",
+  "references": [
+    {
+      "reference": "schemas/twin-kernel.json",
+      "declared_in": ["SKILL.md#孪生内核登记段", "SKILL.md frontmatter pipeline-contract"],
+      "meaning": "18 份同名 scripts/*.py 与主干（知识库转录）的分叉登记簿",
+      "recipient_action": "独立安装不需要它；改脚本前的包内自检请用 `python scripts/check_package.py --as-package`",
+      "verified_without_it": "scripts/vendor/VENDOR.json 承担协议件来源与摘要登记，包内门据此判定"
+    },
+    {
+      "reference": "schemas/contract_check.py",
+      "declared_in": ["SKILL.md#孪生内核登记段"],
+      "meaning": "柜根侧的跨产品契约自检脚本（开发柜专用）",
+      "recipient_action": "不要执行；用包内门 `python scripts/check_package.py --as-package` 代替",
+      "verified_without_it": "包内门的 9 项检查不依赖该脚本"
+    },
+    {
+      "reference": "schemas/source_manifest.py",
+      "declared_in": ["scripts/vendor/source_manifest.py 模块文档串（自述来源）", "LICENSE 第二节"],
+      "meaning": "vendor 副本的**来源说明**，不是运行依赖",
+      "recipient_action": "无需操作；运行期只加载包内 `scripts/vendor/source_manifest.py`（门会校验其摘要与登记一致）",
+      "verified_without_it": "check_package.py 的 validator_importable 证明加载的是包内件"
+    },
+    {
+      "reference": "schemas/source-manifest.schema.json",
+      "declared_in": ["scripts/vendor/source_manifest.py 模块文档串", "scripts/vendor/source-manifest.schema.json 同目录副本"],
+      "meaning": "上述协议的 JSON Schema；包内已带一份副本",
+      "recipient_action": "直接看包内 `scripts/vendor/source-manifest.schema.json`",
+      "verified_without_it": "VENDOR.json 摘要与门内 vendor_digest 检查覆盖"
+    }
+  ]
+}
