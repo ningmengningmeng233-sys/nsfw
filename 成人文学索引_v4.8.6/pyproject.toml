@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "novel-index"
+version = "4.8.5"
+description = "小说索引：可检索、可复核、可恢复的小说索引库"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "responses>=0.25",
+]
+semantic = [
+    "numpy>=1.24",                 # 语义索引向量运算
+    "sentence-transformers>=2.5",  # embedding 模型推理（默认 paraphrase-multilingual-MiniLM-L12-v2）
+]
+# 启用方式：安装后设置环境变量 INDEX_ENABLE_SEMANTIC=1
+# 模型选择：环境变量 INDEX_EMBEDDING_MODEL（默认 sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2）
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+# B6 修复：原先此处有 addopts = "-q"，与命令行 `pytest -q` 叠加成 -qq（verbosity<=-2），
+# 导致跑完后不打印 "N passed" 汇总行，CI 只能眼看进度到 [100%] 后无汇总。quiet 由命令行控制。
+
+[tool.setuptools]
+py-modules = []
