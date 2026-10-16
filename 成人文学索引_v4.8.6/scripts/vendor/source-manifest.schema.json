@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "source-manifest.schema.json",
+  "x-contract": {
+    "name": "source-manifest",
+    "version": "1.0.0"
+  },
+  "title": "转录交付清单契约",
+  "description": "转录端（B站/抖音/知识库转录）交付给下游索引端（成人文学索引/知识库转录）的输入清单契约",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generator",
+    "generated_at",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "generator": {
+      "type": "string",
+      "description": "生成该清单的技能名与版本，例如 B站转录_v5.5.4"
+    },
+    "generated_at": {
+      "type": "string",
+      "description": "ISO-8601 生成时间（UTC）"
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "可选批次标识"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "platform",
+          "source_url",
+          "txt_path",
+          "sha256",
+          "status"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "description": "唯一资源标识，单P为原始ID，分P为 ID_pN"
+          },
+          "title": {
+            "type": "string",
+            "description": "视频或篇章标题"
+          },
+          "platform": {
+            "type": "string",
+            "enum": ["bilibili", "douyin", "generic_audio", "document"]
+          },
+          "source_url": {
+            "type": "string",
+            "description": "原始 URL 或来源链接"
+          },
+          "part_index": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "分 P 序号（单 P 默认为 1）"
+          },
+          "txt_path": {
+            "type": "string",
+            "description": "转录产物主文本相对 manifest 文件所在目录的相对路径"
+          },
+          "evidence_path": {
+            "type": "string",
+            "description": "原始记录文件相对路径（可选）"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "txt_path 指向文件的 SHA-256 哈希值"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["completed", "partial", "failed"],
+            "description": "转录状态，下游索引只摄取 completed"
+          },
+          "audio_duration_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "has_summary": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
