@@ -1,0 +1,5 @@
+# Python 3.10+（脚本使用 PEP 604 `str | None` 与内置泛型注解）
+requests>=2.31
+python-dotenv>=1.0
+PyYAML>=6.0
+pytest            # 导入名 pytest；12 个测试文件里 10 个 import 它（治理仓 P47 补的声明）
