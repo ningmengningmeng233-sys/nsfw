@@ -1,0 +1,26 @@
+{
+  "schema_version": "vendor-registration-1",
+  "why": "共享协议件随包分发必须登记来源与摘要：漏登记就会在收件机上以「校验器异常」的形式炸出来。",
+  "items": [
+    {
+      "path": "scripts/vendor/source_manifest.py",
+      "role": "source-manifest.json 结构、SHA-256 完整性与重复 ID 校验",
+      "provenance": "本技能柜共享内核 schemas/source_manifest.py（W03 协议，非本包自有件）",
+      "algorithm": "sha256",
+      "sha256": "54784e2c1a8fba0b",
+      "sha256_digits": 16,
+      "license": "随主干许可，见 LICENSE 第二节",
+      "sync_rule": "主干变更须同步本副本并更新摘要；不一致时包内门 check_package.py 判红"
+    },
+    {
+      "path": "scripts/vendor/source-manifest.schema.json",
+      "role": "上述协议的 JSON Schema",
+      "provenance": "本技能柜共享内核 schemas/source-manifest.schema.json",
+      "algorithm": "sha256",
+      "sha256": "95a42dc0893eb6ce",
+      "sha256_digits": 16,
+      "license": "随主干许可，见 LICENSE 第二节",
+      "sync_rule": "同上"
+    }
+  ]
+}
